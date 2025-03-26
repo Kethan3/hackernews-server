@@ -1,19 +1,32 @@
 import { Hono } from "hono";
 import { tokenMiddleware } from "./middlewares/token-middleware";
-import { getAllPosts } from "../controllers/posts/posts-controller";
+import { getAllPosts, getMePosts } from "../controllers/posts/posts-controller";
 
 export const postsRoutes = new Hono();
 
-postsRoutes.get("/me", async (context) => {});
+postsRoutes.get("/me",tokenMiddleware, async (context) => {
+  const userId = context.get("userId");
+  try{
+    const userPosts = await getMePosts({ userId});
+
+    return context.json({
+      data : userPosts,
+    })
+  }catch(e){
+     
+  }
+
+
+});
 
 postsRoutes.get("", tokenMiddleware, async (context) => {
-  const posts = await getAllPosts();
-  if (!posts) {
+  const allPosts = await getAllPosts();
+  if (!allPosts) {
     return context.json({
       message: "No posts found",
     });
   }
   return context.json({
-    posts,
+    allPosts,
   });
 });
