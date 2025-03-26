@@ -24,9 +24,11 @@ model Post {
   id          String    @id @default(uuid())
   title       String
   description String?
-  authorId    String
-  author      User      @relation(fields: [authorId], references: [id])
+  content     String
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
   createdAt   DateTime  @default(now())
+  updatedAT DateTime  @updatedAt
   Like        Like[]
   Comment     Comment[]
 }
@@ -37,8 +39,9 @@ model Like {
   postId String
   user   User   @relation(fields: [userId], references: [id])
   post   Post   @relation(fields: [postId], references: [id])
-
-  @@unique([userId, postId])
+  createAt DateTime @default(now())
+  updatedAT DateTime  @updatedAt
+  @@unique([userId,postId])
 }
 
 model Comment {
@@ -49,4 +52,5 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id])
   post      Post     @relation(fields: [postId], references: [id])
   createdAt DateTime @default(now())
+  updatedAT DateTime  @updatedAt
 }
