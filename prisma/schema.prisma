@@ -8,16 +8,45 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-model Users {
-  id       String @default(uuid())
-  username String @unique
-  name String?
+model User {
+  id        String    @id @default(uuid())
+  username  String    @unique
+  name      String?
   password  String
-
-  createdAT DateTime @default(now())
+  createdAT DateTime  @default(now())
   updatedAT DateTime  @updatedAt
-
+  posts     Post[]
+  Like      Like[]
+  Comment   Comment[]
 }
 
+model Post {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+  createdAt   DateTime  @default(now())
+  Like        Like[]
+  Comment     Comment[]
+}
 
+model Like {
+  id     String @id @default(uuid())
+  userId String
+  postId String
+  user   User   @relation(fields: [userId], references: [id])
+  post   Post   @relation(fields: [postId], references: [id])
 
+  @@unique([userId, postId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+  createdAt DateTime @default(now())
+}
