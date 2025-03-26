@@ -39,7 +39,7 @@ import {
   SignUpWithUsernameAndPasswordError,
   type LogInWithUsernameAndPasswordResult,
   type SignUpWithUsernameAndPasswordResult,
-} from "./auth-types";
+} from "./authentication-types";
 
 import jwt from "jsonwebtoken";
 import { jwtsecretKey } from "../../environment";
