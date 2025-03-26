@@ -1,10 +1,9 @@
-import type { Post } from "@prisma/client"
+import type { Post } from "@prisma/client";
 
-export type GetMePosts = {
-    post : Post;
-   
-}
+export type GetMePostsResult = {
+  post : Post;
+};
 
-export type GetMeAllPosts ={
-    posts : Post[];
-}
+export type GetAllPostsResult = {
+  posts: Post[];
+};
