@@ -42,8 +42,8 @@ import {
 } from "./authentication-types";
 
 import jwt from "jsonwebtoken";
-import { jwtsecretKey } from "../../environment";
-import { prismaClient } from "../extras/prisma";
+import { jwtsecretKey } from "../../../environment";
+import { prismaClient } from "../../extras/prisma";
 
 const createJWToken = (parameters: {
   id: string;
