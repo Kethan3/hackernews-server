@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { tokenMiddleware } from "./middlewares/token-middleware";
-import { getAllPosts, getMePosts } from "../controllers/posts/posts-controller";
+import { createPost, deletePost, getAllPosts, getMePosts } from "../controllers/posts/posts-controller";
 
 export const postsRoutes = new Hono();
 
@@ -41,12 +41,18 @@ postsRoutes.get("/me", tokenMiddleware, async (context) => {
 postsRoutes.post("", tokenMiddleware, async (context) => {
   const userId = context.get("userId");
   const { title, description, content } = await context.req.json();
-  try{
-
-  }catch(e){
+  try {
+    const newPost = await createPost({ userId, title, description, content });
+    return context.json(
+      {
+        data: newPost,
+      },
+      201
+    );
+  } catch (e) {
     return context.json({
       error: "Failed to create post",
-    })
+    });
   }
 });
 
@@ -56,7 +62,7 @@ postsRoutes.delete("/:postId", tokenMiddleware, async (context) => {
 
   try {
     await deletePost({ userId, postId });
-    return context.json({ message : "deleted the post successfully"})
+    return context.json({ message: "deleted the post successfully" });
   } catch (e) {
     return context.json({
       error: "failed to delete post",
