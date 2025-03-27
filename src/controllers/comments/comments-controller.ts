@@ -1,5 +1,9 @@
 import { prismaClient } from "../../extras/prisma";
-import type { CreateCommentResult, GetCommentsResult, UpdateCommentResult } from "./comments-types";
+import type {
+  CreateCommentResult,
+  GetCommentsResult,
+  UpdateCommentResult,
+} from "./comments-types";
 
 export const getCommentsOnPost = async (parameters: {
   postId: string;
@@ -47,9 +51,20 @@ export const deleteComment = async (parameters: {
   });
 };
 
+export const updateComment = async (parameters: {
+  userId: string;
+  commentId: string;
+  content: string;
+}): Promise<UpdateCommentResult> => {
+  const comment = await prismaClient.comment.update({
+    where: {
+      id: parameters.commentId,
+      userId: parameters.userId,
+    },
+    data: {
+      content: parameters.content,
+    },
+  });
 
-export const updateComment = async (parammeters :{
-
-}) : Promise<UpdateCommentResult>{
-    // update comment logic here
-}
+  return { comment };
+};
