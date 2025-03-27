@@ -5,5 +5,5 @@ export type GetLikesResult = {
 };
 
 export type CreateLikeResult = {
-  like: Like | null;
+  like: Like ;
 };

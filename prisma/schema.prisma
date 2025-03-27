@@ -28,19 +28,20 @@ model Post {
   userId      String
   user        User      @relation(fields: [userId], references: [id])
   createdAt   DateTime  @default(now())
-  updatedAT DateTime  @updatedAt
+  updatedAT   DateTime  @updatedAt
   Like        Like[]
   Comment     Comment[]
 }
 
 model Like {
-  id     String @id @default(uuid())
-  userId String
-  postId String
-  user   User   @relation(fields: [userId], references: [id])
-  post   Post   @relation(fields: [postId], references: [id])
-  createAt DateTime @default(now())
-  updatedAT DateTime  @updatedAt
+  id        String   @id @default(uuid())
+  userId    String
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
+  createAt  DateTime @default(now())
+  updatedAT DateTime @updatedAt
+
 }
 
 model Comment {
@@ -51,5 +52,5 @@ model Comment {
   user      User     @relation(fields: [userId], references: [id])
   post      Post     @relation(fields: [postId], references: [id])
   createdAt DateTime @default(now())
-  updatedAT DateTime  @updatedAt
+  updatedAT DateTime @updatedAt
 }
