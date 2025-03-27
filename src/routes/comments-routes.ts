@@ -3,11 +3,19 @@ import { tokenMiddleware } from "./middlewares/token-middleware";
 
 export const commentsRoutes = new Hono();
 
-commentsRoutes.get("/me", async (context) => {
+commentsRoutes.get("/on/:postId", async (context) => {
+const postId = context.req.param("postId");
+
+});
+
+commentsRoutes.post("/on/:postId",tokenMiddleware, async (context) =>{
+    const postId = context.req.param("postId");
+
+    const {content} = await context.req.json();
 
 
 });
 
-commentsRoutes.get("",tokenMiddleware, async () =>{
+commentsRoutes.delete("/:commentId",tokenMiddleware,async (context)=>{
     
 })

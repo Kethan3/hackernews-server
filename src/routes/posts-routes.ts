@@ -19,6 +19,11 @@ postsRoutes.get("/me",tokenMiddleware, async (context) => {
 
 });
 
+postsRoutes.delete("/:postId",tokenMiddleware,async (context)=>{
+  const postId = context.req.param("postId");
+
+})
+
 postsRoutes.get("", tokenMiddleware, async (context) => {
   const allPosts = await getAllPosts();
   if (!allPosts) {
@@ -30,3 +35,9 @@ postsRoutes.get("", tokenMiddleware, async (context) => {
     allPosts,
   });
 });
+
+postsRoutes.post("",tokenMiddleware,async (context) =>{
+ const {title,description,content} = await context.req.json();
+
+});
+
