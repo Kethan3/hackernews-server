@@ -12,6 +12,9 @@ export const getMePosts = async (parameters: {
     where: {
       userId: parameters.userId,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return {
