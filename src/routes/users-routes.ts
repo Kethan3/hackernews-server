@@ -12,14 +12,18 @@ usersRoutes.get("/me", tokenMiddleware, async (context) => {
     const user = await getMe({
       userId,
     });
-    return context.json({
-      data: user,
-    });
+
+    return context.json(
+      {
+        data: user,
+      },
+      200
+    );
   } catch (e) {
     if (e === GetMeError.BAD_REQUEST) {
       return context.json(
         {
-          error: "user not found",
+          error: "User not found",
         },
         400
       );
@@ -27,20 +31,30 @@ usersRoutes.get("/me", tokenMiddleware, async (context) => {
 
     return context.json(
       {
-        error: "Internal Server Error",
+        message: "Internal Server Error",
       },
       500
     );
   }
 });
 
-usersRoutes.get("", tokenMiddleware, async (context) => {
-  const users = await getAllUsers();
 
-  context.json(
-    {
-      data: users,
-    },
-    200
-  );
+usersRoutes.get("", tokenMiddleware, async (context) => {
+  try {
+    const users = await getAllUsers();
+
+    return context.json(
+      {
+        data: users,
+      },
+      200
+    );
+  } catch (e) {
+    return context.json(
+      {
+        message: "Internal Server Error",
+      },
+      500
+    );
+  }
 });

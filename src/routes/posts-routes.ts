@@ -4,40 +4,62 @@ import { getAllPosts, getMePosts } from "../controllers/posts/posts-controller";
 
 export const postsRoutes = new Hono();
 
-postsRoutes.get("/me",tokenMiddleware, async (context) => {
-  const userId = context.get("userId");
-  try{
-    const userPosts = await getMePosts({ userId});
+postsRoutes.get("", tokenMiddleware, async (context) => {
+  try {
+    const page = Number(context.req.query("page")) || 1;
+    const posts = await getAllPosts({ page });
 
-    return context.json({
-      data : userPosts,
-    })
-  }catch(e){
-     
+    return context.json({ data: posts });
+  } catch (e) {
+    return context.json(
+      {
+        error: "Failed to fetch posts",
+      },
+      500
+    );
   }
-
-
 });
 
-postsRoutes.delete("/:postId",tokenMiddleware,async (context)=>{
+postsRoutes.get("/me", tokenMiddleware, async (context) => {
+  const userId = context.get("userId");
+  try {
+    const userPosts = await getMePosts({ userId });
+
+    return context.json({
+      data: userPosts,
+    });
+  } catch (e) {
+    return context.json(
+      {
+        error: "Failed to fetch user's posts",
+      },
+      500
+    );
+  }
+});
+
+postsRoutes.post("", tokenMiddleware, async (context) => {
+  const userId = context.get("userId");
+  const { title, description, content } = await context.req.json();
+  try{
+
+  }catch(e){
+    return context.json({
+      error: "Failed to create post",
+    })
+  }
+});
+
+postsRoutes.delete("/:postId", tokenMiddleware, async (context) => {
+  const userId = context.get("userId");
   const postId = context.req.param("postId");
 
-})
-
-postsRoutes.get("", tokenMiddleware, async (context) => {
-  const allPosts = await getAllPosts();
-  if (!allPosts) {
+  try {
+    await deletePost({ userId, postId });
+    return context.json({ message : "deleted the post successfully"})
+  } catch (e) {
     return context.json({
-      message: "No posts found",
+      error: "failed to delete post",
     });
   }
-  return context.json({
-    allPosts,
-  });
 });
-
-postsRoutes.post("",tokenMiddleware,async (context) =>{
- const {title,description,content} = await context.req.json();
-
-});
-

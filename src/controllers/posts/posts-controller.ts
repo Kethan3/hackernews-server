@@ -15,10 +15,20 @@ export const getMePosts = async (parameters: {
   };
 };
 
-export const getAllPosts = async (): Promise<getPostsResult> => {
-  const posts = await prismaClient.post.findMany();
+export const getAllPosts = async (parameters: {
+  page: number;
+}): Promise<getPostsResult> => {
+  const limit = 10;
+  const offset = (parameters.page - 1) * limit;
 
-  return {
-    posts,
-  };
+  const posts = await prismaClient.post.findMany({
+    orderBy: { createdAt: "desc" },
+    skip: offset,
+    take: limit,
+  });
+
+  return { posts };
 };
+
+
+export const 

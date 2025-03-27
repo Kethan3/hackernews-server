@@ -18,10 +18,11 @@ export const getMe = async (parameters: { userId: string }): Promise<GetMeResult
 };
 
 
-export const getAllUsers = async () : Promise<GetAllUsersResult>=>{
-    const users = await prismaClient.user.findMany();
- 
-    return {
-        users,
-        }
+
+export const getAllUsers = async (): Promise<GetAllUsersResult> => {
+  const users = await prismaClient.user.findMany();
+
+  return {
+    users,
+  };
 };
