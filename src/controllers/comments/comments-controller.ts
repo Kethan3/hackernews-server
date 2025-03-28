@@ -1,8 +1,9 @@
 import { prismaClient } from "../../extras/prisma";
-import type {
-  CreateCommentResult,
-  GetCommentsResult,
-  UpdateCommentResult,
+import {
+  CommentStatus,
+  type CreateCommentResult,
+  type GetCommentsResult,
+  type UpdateCommentResult,
 } from "./comments-types";
 
 export const getCommentsOnPost = async (parameters: {
@@ -39,16 +40,26 @@ export const createComment = async (parameters: {
   return { comment };
 };
 
-export const deleteComment = async (parameters: {
-  userId: string;
+export const deleteComment = async (params: {
   commentId: string;
-}): Promise<void> => {
-  const comment = await prismaClient.comment.delete({
-    where: {
-      id: parameters.commentId,
-      userId: parameters.userId,
-    },
-  });
+  userId: string;
+}): Promise<CommentStatus> => {
+  try {
+    const comment = await prismaClient.comment.findUnique({
+      where: { id: params.commentId },
+    });
+
+    if (!comment) {
+      return CommentStatus.COMMENT_NOT_FOUND;
+    }
+
+    await prismaClient.comment.delete({ where: { id: params.commentId } });
+
+    return CommentStatus.DELETE_SUCCESS;
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return CommentStatus.UNKNOWN;
+  }
 };
 
 export const updateComment = async (parameters: {

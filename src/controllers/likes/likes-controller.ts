@@ -1,4 +1,3 @@
-import { checkOptionalParameter } from "hono/utils/url";
 import { prismaClient } from "../../extras/prisma";
 import type { CreateLikeResult, GetLikesResult } from "./likes-types";
 

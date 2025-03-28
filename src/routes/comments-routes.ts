@@ -37,20 +37,6 @@ commentsRoutes.post("/on/:postId", tokenMiddleware, async (context) => {
   }
 });
 
-commentsRoutes.delete("/:commentId", tokenMiddleware, async (context) => {
-  const userId = context.get("userId");
-  const commentId = context.req.param("commentId");
-  try {
-    await deleteComment({ userId, commentId });
-  } catch (e) {
-    return context.json(
-      {
-        error: "Failed to delete comment",
-      },
-      500
-    );
-  }
-});
 
 commentsRoutes.patch("/:commentId", tokenMiddleware, async (context) => {
   const userId = context.get("userId");
@@ -66,5 +52,18 @@ commentsRoutes.patch("/:commentId", tokenMiddleware, async (context) => {
       },
       500
     );
+  }
+});
+
+
+commentsRoutes.delete("/:commentId", tokenMiddleware, async (context) => {
+  const commentId = context.req.param("commentId");
+  const userId = context.get("userId");
+
+  try {
+    const result = await deleteComment({ commentId, userId });
+    return context.json({ status: result }, 200);
+  } catch (error) {
+    return context.json({ status: error }, 403);
   }
 });
