@@ -12,3 +12,9 @@ allRoutes.route("/users", usersRoutes);
 allRoutes.route("/posts", postsRoutes);
 allRoutes.route("/likes", likesRoutes);
 allRoutes.route("/comments", commentsRoutes);
+allRoutes.get("/", (context) => {
+    return context.json({
+        message: "Welcome to the  hackernews server",
+    });
+    }
+);
