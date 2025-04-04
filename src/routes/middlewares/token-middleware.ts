@@ -1,6 +1,6 @@
 import { createMiddleware } from "hono/factory";
 import jwt from "jsonwebtoken";
-import { jwtsecretKey } from "../../environment.js";
+import { jwtSecretKey } from "../../environment.js";
 
 export const tokenMiddleware = createMiddleware<{
   Variables: {
@@ -18,7 +18,7 @@ export const tokenMiddleware = createMiddleware<{
   }
 
   try {
-    const payload = jwt.verify(token, jwtsecretKey) as jwt.JwtPayload;
+    const payload = jwt.verify(token, jwtSecretKey) as jwt.JwtPayload;
 
     const userId = payload.sub;
 
