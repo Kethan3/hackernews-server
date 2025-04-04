@@ -1,7 +1,7 @@
 import { Hono } from "hono";
-import { tokenMiddleware } from "./middlewares/token-middleware";
-import { getAllUsers, getMe } from "../controllers/users/users-controller";
-import { GetMeError } from "../controllers/users/users-types";
+import { tokenMiddleware } from "./middlewares/token-middleware.js";
+import { getAllUsers, getMe } from "../controllers/users/users-controller.js";
+import { GetMeError } from "../controllers/users/users-types.js";
 
 
 export const usersRoutes = new Hono();

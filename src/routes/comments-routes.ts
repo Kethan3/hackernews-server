@@ -1,12 +1,12 @@
 import { Hono } from "hono";
-import { tokenMiddleware } from "./middlewares/token-middleware";
+import { tokenMiddleware } from "./middlewares/token-middleware.js";
 import {
   createComment,
   deleteComment,
   getCommentsOnPost,
   updateComment,
  
-} from "../controllers/comments/comments-controller";
+} from "../controllers/comments/comments-controller.js";
 
 export const commentsRoutes = new Hono();
 

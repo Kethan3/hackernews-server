@@ -1,5 +1,5 @@
-import { prismaClient } from "../../extras/prisma";
-import type { CreateLikeResult, GetLikesResult } from "./likes-types";
+import { prismaClient } from "../../extras/prisma.js";
+import type { CreateLikeResult, GetLikesResult } from "./likes-types.js";
 
 export const getLikesOnPost = async (parameters: {
   postId: string;

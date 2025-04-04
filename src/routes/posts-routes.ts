@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { tokenMiddleware } from "./middlewares/token-middleware";
-import { createPost, deletePost, getAllPosts, getMePosts } from "../controllers/posts/posts-controller";
+import { tokenMiddleware } from "./middlewares/token-middleware.js";
+import { createPost, deletePost, getAllPosts, getMePosts } from "../controllers/posts/posts-controller.js";
 
 export const postsRoutes = new Hono();
 

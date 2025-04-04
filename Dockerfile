@@ -2,13 +2,14 @@ FROM node:22.1.0
 
 WORKDIR /app
 
-# Copy only needed files
 COPY package*.json ./
 COPY tsconfig*.json ./
 COPY src ./src
 
-# Copy Prisma folder only if it exists by copying everything, relying on .dockerignore
+
 COPY . .
+
+# COPY .env .env 
 
 RUN npm install
 
