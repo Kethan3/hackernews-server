@@ -4,6 +4,8 @@ import { usersRoutes } from "./users-routes.js";
 import { postsRoutes } from "./posts-routes.js";
 import { likesRoutes } from "./likes-routes.js";
 import { commentsRoutes } from "./comments-routes.js";
+import { openapi } from "../docs/openapi";
+import { swaggerUI } from "@hono/swagger-ui";
 
 export const allRoutes = new Hono();
 
@@ -12,9 +14,6 @@ allRoutes.route("/users", usersRoutes);
 allRoutes.route("/posts", postsRoutes);
 allRoutes.route("/likes", likesRoutes);
 allRoutes.route("/comments", commentsRoutes);
-allRoutes.get("/", (context) => {
-    return context.json({
-        message: "Welcome to the  hackernews server",
-    });
-    }
-);
+
+allRoutes.get("/doc", (c) => c.json(openapi));
+allRoutes.get("/ui", swaggerUI({ url: "/doc" }));
