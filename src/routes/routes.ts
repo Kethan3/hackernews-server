@@ -4,7 +4,7 @@ import { usersRoutes } from "./users-routes.js";
 import { postsRoutes } from "./posts-routes.js";
 import { likesRoutes } from "./likes-routes.js";
 import { commentsRoutes } from "./comments-routes.js";
-import { openapi } from "../docs/openapi";
+import { openapi } from "../docs/openapi.js";
 import { swaggerUI } from "@hono/swagger-ui";
 
 export const allRoutes = new Hono();
