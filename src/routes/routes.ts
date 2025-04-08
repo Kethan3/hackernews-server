@@ -4,8 +4,7 @@ import { usersRoutes } from "./users-routes.js";
 import { postsRoutes } from "./posts-routes.js";
 import { likesRoutes } from "./likes-routes.js";
 import { commentsRoutes } from "./comments-routes.js";
-import { openapi } from "../docs/openapi.js";
-import { swaggerUI } from "@hono/swagger-ui";
+import { swaggerRoutes } from "./swagger.js";
 
 export const allRoutes = new Hono();
 
@@ -14,6 +13,4 @@ allRoutes.route("/users", usersRoutes);
 allRoutes.route("/posts", postsRoutes);
 allRoutes.route("/likes", likesRoutes);
 allRoutes.route("/comments", commentsRoutes);
-
-allRoutes.get("/doc", (c) => c.json(openapi));
-allRoutes.get("/ui", swaggerUI({ url: "/doc" }));
+allRoutes.route("/", swaggerRoutes);
