@@ -30,8 +30,20 @@ const betterAuthServerClient = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
+    
   },
-  plugins: [username(),],
+  plugins: [username()],
+  advanced: {
+    cookies: {
+      sessionToken: {
+        attributes: {
+          sameSite: "none",
+          secure: true,
+          partitioned: true,
+        },
+      },
+    },
+  },
 });
 
 export default betterAuthServerClient;
