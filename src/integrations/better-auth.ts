@@ -34,14 +34,10 @@ const betterAuthServerClient = betterAuth({
   },
   plugins: [username()],
   advanced: {
-    cookies: {
-      sessionToken: {
-        attributes: {
-          sameSite: "none",
-          secure: true,
-          partitioned: true,
-        },
-      },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
+      partitioned: true,
     },
   },
 });
