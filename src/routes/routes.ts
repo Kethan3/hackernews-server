@@ -14,7 +14,7 @@ export const allRoutes = new Hono();
 
 allRoutes.use(
   cors({
-    origin: ["http://localhost:4000"],
+    origin: ["https://hackernews-www-54.vercel.app"],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
     allowHeaders: ["Content-Type", "Authorization", "token"],
