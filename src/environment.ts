@@ -1,6 +1,6 @@
 // export const jwtsecretKey = process.env.JWT_SECRET_KEY || process.exit(1);
 
-export const jwtSecretKey = process.env.JWT_SECRET_KEY || process.exit(1);
+// export const jwtSecretKey = process.env.JWT_SECRET_KEY || process.exit(1);
 
 export const databaseUrl = process.env.DATABASE_URL || process.exit(1);
 
