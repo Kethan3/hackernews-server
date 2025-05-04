@@ -4,6 +4,7 @@ import {
   type GetMeResult,
   type GetUsersResult,
   GetUsersError,
+  type UserDetails,
 } from "./users-types";
 
 export const GetMe = async (parameters: {
@@ -130,3 +131,72 @@ export const GetUsers = async (parameter: {
     throw GetUsersError.UNKNOWN;
   }
 };
+
+export const GetUserById = async (userId: string): Promise<UserDetails> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        username: true,
+        name: true,
+        about: true,
+        createdAt: true,
+        updatedAt: true,
+        posts: {
+          select: {
+            id: true,
+            title: true,
+            content: true,
+            createdAt: true,
+            updatedAt: true,
+            userId: true,
+          },
+        },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            postId: true,  // postId might be null
+            createdAt: true,
+            updatedAt: true,
+            userId: true,
+          },
+        },
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const result: UserDetails = {
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name || "",
+        about: user.about || "",
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        postsCount: user.posts.length,
+        commentsCount: user.comments.filter(comment => comment.postId !== null).length,  // Count only comments with postId
+        posts: user.posts || [],
+        // Ensure postId is always a string (filter out comments with null postId)
+        comments: user.comments.filter(comment => comment.postId !== null) as {
+          id: string;
+          content: string;
+          postId: string;
+          createdAt: Date;
+          updatedAt: Date;
+          userId: string;
+        }[],
+      },
+    };
+
+    return result;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Unknown error");
+  }
+};
+

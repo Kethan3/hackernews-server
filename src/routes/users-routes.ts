@@ -5,7 +5,7 @@ import { GetUsersError, GetMeError } from "../controllers/users/users-types";
 import { prismaClient } from "../integrations/prisma";
 import { sessionMiddleware } from "./middlewares/session-middleware";
 import { getPagination } from "../extras/pagination";
-import { GetMe, GetUsers } from "../controllers/users/users-controller";
+import { GetMe, GetUserById, GetUsers } from "../controllers/users/users-controller";
 export const usersRoutes = new Hono();
 
 usersRoutes.all("/me", sessionMiddleware, async (context) => {
@@ -78,5 +78,22 @@ usersRoutes.get("/", sessionMiddleware, async (context) => {
     if (error === GetUsersError.UNKNOWN) {
       return context.json({ error: "Unknown error" }, 500);
     }
+  }
+});
+
+
+usersRoutes.get("/:id", sessionMiddleware, async (context) => {
+  const userId = context.req.param("id"); // Get userId from URL params
+
+  try {
+    const result = await GetUserById(userId); // Use the GetUserById function to get the user's data
+
+    if (!result) {
+      return context.json({ error: "User not found" }, 404);
+    }
+
+    return context.json(result, 200);
+  } catch (error) {
+    return context.json(  "Unknown error" , 500);
   }
 });

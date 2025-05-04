@@ -231,29 +231,98 @@ export const DeletePost = async (parameters: {
   }
 };
 
+// export const GetPostById = async (parameters: {
+//   postId: string;
+// }): Promise<GetPostByIdResult> => {
+//   try {
+//     const { postId } = parameters;
+
+//     const post = await prisma.post.findUnique({
+//       where: { id: postId },
+//       include: {
+//         author: {
+//           select: {
+//             username: true,
+//             name: true,
+//           },
+//         },
+//       },
+//     });
+
+//     if (!post) {
+//       throw GetPostByIdError.POST_NOT_FOUND;
+//     }
+
+//     return { post };
+//   } catch (e) {
+//     console.error(e);
+//     if (e === GetPostByIdError.POST_NOT_FOUND) {
+//       throw GetPostByIdError.POST_NOT_FOUND;
+//     }
+//     throw GetPostByIdError.UNKNOWN;
+//   }
+// };
+
 export const GetPostById = async (parameters: {
   postId: string;
+  userId?: string;
 }): Promise<GetPostByIdResult> => {
   try {
-    const { postId } = parameters;
+    const { postId, userId } = parameters;
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
       include: {
         author: {
           select: {
+            id: true, // ✅ Fix: Include id based on schema
             username: true,
             name: true,
+          },
+        },
+        likes: {
+          select: { userId: true },
+        },
+        comments: {
+          include: {
+            user: {
+              select: {
+                username: true,
+                name: true,
+              },
+            },
           },
         },
       },
     });
 
-    if (!post) {
-      throw GetPostByIdError.POST_NOT_FOUND;
-    }
+    if (!post) throw GetPostByIdError.POST_NOT_FOUND;
 
-    return { post };
+    const formattedPost = {
+      id: post.id,
+      title: post.title,
+      content: post.content,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      userId: post.author.id, // ✅ This works now
+      user: {
+        username: post.author.username,
+        name: post.author.name,
+      },
+      likeCount: post.likes.length,
+      likedByUser: userId ? post.likes.some((like) => like.userId === userId) : false,
+      comments: post.comments.map((comment) => ({
+        id: comment.id,
+        content: comment.content,
+        createdAt: comment.createdAt,
+        user: {
+          username: comment.user.username,
+          name: comment.user.name,
+        },
+      })),
+    };
+
+    return { post: formattedPost };
   } catch (e) {
     console.error(e);
     if (e === GetPostByIdError.POST_NOT_FOUND) {
@@ -262,6 +331,7 @@ export const GetPostById = async (parameters: {
     throw GetPostByIdError.UNKNOWN;
   }
 };
+
 
 export const GetCommentsByPostId = async (parameters: {
   postId: string;
@@ -423,3 +493,5 @@ export const GetUserPostsBySlug = async (parameters: {
     throw GetUserPostsBySlugError.UNKNOWN;
   }
 };
+
+

@@ -31,7 +31,7 @@ const betterAuthServerClient = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [username()],
+  plugins: [username(),],
 });
 
 export default betterAuthServerClient;

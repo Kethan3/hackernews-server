@@ -86,22 +86,37 @@ postsRoutes.get("/:postId", async (c) => {
 });
 
 
-postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
+// postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
+//   try {
+//     const userId = c.get("user").id;
+//     const postId = c.req.param("postId");
+//     await DeletePost({ postId, userId });
+//     return c.json({ message: "Post deleted successfully" }, 200);
+//   } catch (error) {
+//     if (error === DeletePostError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found!" }, 404);
+//     }
+//     if (error === DeletePostError.USER_NOT_FOUND) {
+//       return c.json({ error: "User not found!" });
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+postsRoutes.get("/:postId",sessionMiddleware, async (c) => {
   try {
-    const userId = c.get("user").id;
     const postId = c.req.param("postId");
-    await DeletePost({ postId, userId });
-    return c.json({ message: "Post deleted successfully" }, 200);
+    const userId = c.get("user")?.id;
+    const result = await GetPostById({ postId, userId });
+    return c.json(result, 200);
   } catch (error) {
-    if (error === DeletePostError.POST_NOT_FOUND) {
+    if (error === GetPostByIdError.POST_NOT_FOUND) {
       return c.json({ error: "Post not found!" }, 404);
-    }
-    if (error === DeletePostError.USER_NOT_FOUND) {
-      return c.json({ error: "User not found!" });
     }
     return c.json({ error: "Unknown error!" }, 500);
   }
 });
+
 
 
 postsRoutes.get("/by/:slug", async (c) => {

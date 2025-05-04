@@ -35,6 +35,37 @@ export type GetMeResult = {
   };
 };
 
+
+export type UserDetails = {
+  user: {
+    id: string;
+    username: string;
+    name: string;
+    about: string;
+    createdAt: Date;
+    updatedAt: Date;
+    postsCount: number;
+    commentsCount: number;
+    posts: {
+      id: string;
+      title: string;
+      content: string;
+      createdAt: Date;
+      updatedAt: Date;
+      userId: string;
+    }[];
+    comments: {
+      id: string;
+      content: string;
+      postId: string;
+      createdAt: Date;
+      updatedAt: Date;
+      userId: string;
+    }[];
+  };
+};
+
+
 export enum GetMeError {
   USER_NOT_FOUND = "USER_NOT_FOUND",
   PAGE_BEYOND_LIMIT = "PAGE_BEYOND_LIMIT",
