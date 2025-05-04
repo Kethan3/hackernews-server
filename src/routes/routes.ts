@@ -9,12 +9,13 @@ import { commentsRoutes } from "./comments-routes.js";
 
 import { cors } from "hono/cors";
 import { authRoute } from "./middlewares/session-middleware.js";
+import { webClientUrl } from "../environment.js";
 
 export const allRoutes = new Hono();
 
 allRoutes.use(
   cors({
-    origin: ["https://hackernews-www-54.vercel.app"],
+    origin: [webClientUrl],
     allowMethods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
     allowHeaders: ["Content-Type", "Authorization", "token"],
