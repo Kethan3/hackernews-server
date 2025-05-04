@@ -1,4 +1,4 @@
-import type { Comment } from "../../generated/prisma";
+import type { Comment } from "../../generated/prisma/index.js";
 
 export type GetCommentsResult = {
   comments: Comment[];

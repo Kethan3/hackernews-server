@@ -1,4 +1,4 @@
-import type { Comment, Post } from "../../generated/prisma";
+import type { Comment, Post } from "../../generated/prisma/index.js";
 
 
 export type GetPostsResult = {

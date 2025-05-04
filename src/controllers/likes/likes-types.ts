@@ -1,4 +1,4 @@
-import type { Like } from "../../generated/prisma";
+import type { Like } from "../../generated/prisma/index.js";
 
 export type GetLikesResult = {
   likes: Like[];

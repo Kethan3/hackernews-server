@@ -1,4 +1,4 @@
-import type { User } from "../../generated/prisma";
+import type { User } from "../../generated/prisma/index.js";
 
 export type GetMeResult = {
   user: {
