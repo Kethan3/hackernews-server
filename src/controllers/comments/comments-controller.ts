@@ -12,7 +12,7 @@ import {
   GetCommentsOnMeError,
   GetCommentsOnUserError,
   type GetCommentsOnUserResult,
-} from "./comments-types";
+} from "./comments-types.js";
 
 export const GetComments = async (parameters: {
   postId: string;

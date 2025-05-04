@@ -10,7 +10,7 @@ import {
   type GetLikesOnUserResult,
   type GetLikesResult,
   type LikePostResult,
-} from "./likes-types";
+} from "./likes-types.js";
 
 export const GetLikes = async (parameters: {
   postId: string;

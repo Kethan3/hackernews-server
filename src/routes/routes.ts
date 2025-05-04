@@ -2,13 +2,13 @@ import { Hono } from "hono";
 import { swaggerUI } from "@hono/swagger-ui";
 
 import { authenticationRoutes } from "./authentication-routes";
-import { usersRoutes } from "./users-routes";
-import { postsRoutes } from "./posts-routes";
-import { likesRoutes } from "./likes-routes";
-import { commentsRoutes } from "./comments-routes";
+import { usersRoutes } from "./users-routes.js";
+import { postsRoutes } from "./posts-routes.js";
+import { likesRoutes } from "./likes-routes.js";
+import { commentsRoutes } from "./comments-routes.js";
 
 import { cors } from "hono/cors";
-import { authRoute } from "./middlewares/session-middleware";
+import { authRoute } from "./middlewares/session-middleware.js";
 
 export const allRoutes = new Hono();
 

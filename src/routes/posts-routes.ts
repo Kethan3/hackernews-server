@@ -1,14 +1,14 @@
 import { Hono } from "hono";
-import { sessionMiddleware } from "./middlewares/session-middleware";
+import { sessionMiddleware } from "./middlewares/session-middleware.js";
 
 import {
   GetPostsError,
   CreatePostError,
-  DeletePostError,
+  // DeletePostError,
   GetPostByIdError,
-} from "../controllers/posts/posts-types";
-import { getPagination } from "../extras/pagination";
-import { CreatePost, DeletePost, GetPostById, GetPosts, GetUserPosts, GetUserPostsBySlug } from "../controllers/posts/posts-controller";
+} from "../controllers/posts/posts-types.js";
+import { getPagination } from "../extras/pagination.js";
+import { CreatePost, DeletePost, GetPostById, GetPosts, GetUserPosts, GetUserPostsBySlug } from "../controllers/posts/posts-controller.js";
 
 
 

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { sessionMiddleware } from "./middlewares/session-middleware";
+import { sessionMiddleware } from "./middlewares/session-middleware.js";
 
 import {
   DeleteLikeError,
@@ -7,9 +7,9 @@ import {
   GetLikesOnMeError,
   LikePostError,
   GetLikesOnUserError,
-} from "../controllers/likes/likes-types";
-import { getPagination } from "../extras/pagination";
-import { CreateLike, DeleteLike, GetLikes, GetLikesOnMe, GetLikesOnUser } from "../controllers/likes/likes-controller";
+} from "../controllers/likes/likes-types.js";
+import { getPagination } from "../extras/pagination.js";
+import { CreateLike, DeleteLike, GetLikes, GetLikesOnMe, GetLikesOnUser } from "../controllers/likes/likes-controller.js";
 
 
 export const likesRoutes = new Hono();

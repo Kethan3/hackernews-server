@@ -13,7 +13,7 @@ import {
   CreateCommentByPostIdError,
   type CreateCommentByPostIdResult,
   GetUserPostsBySlugError,
-} from "./posts-types";
+} from "./posts-types.js";
 
 export const GetPosts = async (parameter: {
   page: number;
