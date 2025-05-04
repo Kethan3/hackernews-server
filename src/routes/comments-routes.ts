@@ -14,6 +14,27 @@ import { CreateComment, DeleteComment, GetComments, GetCommentsOnMe, GetComments
 
 export const commentsRoutes = new Hono();
 
+// commentsRoutes.get("/on/:postId", async (c) => {
+//   try {
+//     const postId = c.req.param("postId");
+//     const { page, limit } = getPagination(c);
+//     const result = await GetComments({ postId, page, limit });
+//     return c.json(result, 200);
+//   } catch (error) {
+//     if (error === GetCommentsError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found" }, 404);
+//     }
+//     if (error === GetCommentsError.COMMENTS_NOT_FOUND) {
+//       return c.json({ error: "No comments found on this post" }, 404);
+//     }
+//     if (error === GetCommentsError.PAGE_BEYOND_LIMIT) {
+//       return c.json({ error: "No comments found on the requested page" }, 404);
+//     }
+//     return c.json({ error: "Unknown error" }, 500);
+//   }
+// });
+
+
 commentsRoutes.get("/on/:postId", async (c) => {
   try {
     const postId = c.req.param("postId");
@@ -24,15 +45,19 @@ commentsRoutes.get("/on/:postId", async (c) => {
     if (error === GetCommentsError.POST_NOT_FOUND) {
       return c.json({ error: "Post not found" }, 404);
     }
-    if (error === GetCommentsError.COMMENTS_NOT_FOUND) {
-      return c.json({ error: "No comments found on this post" }, 404);
+
+    if (
+      error === GetCommentsError.COMMENTS_NOT_FOUND ||
+      error === GetCommentsError.PAGE_BEYOND_LIMIT
+    ) {
+      // Return empty array with 200 OK
+      return c.json({ comments: [], total: 0, page: 1, limit: 10 }, 200);
     }
-    if (error === GetCommentsError.PAGE_BEYOND_LIMIT) {
-      return c.json({ error: "No comments found on the requested page" }, 404);
-    }
+
     return c.json({ error: "Unknown error" }, 500);
   }
 });
+
 
 commentsRoutes.post("/on/:postId", sessionMiddleware, async (c) => {
   try {
