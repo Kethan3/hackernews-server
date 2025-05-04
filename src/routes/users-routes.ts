@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 import { GetUsersError, GetMeError } from "../controllers/users/users-types.js";
 
-import { prismaClient } from "../integrations/prisma";
+import { prismaClient } from "../integrations/prisma/index.js";
 import { sessionMiddleware } from "./middlewares/session-middleware.js";
 import { getPagination } from "../extras/pagination.js";
 import { GetMe, GetUserById, GetUsers } from "../controllers/users/users-controller.js";
