@@ -14,45 +14,12 @@ import { CreateLike, DeleteLike, GetLikes, GetLikesOnMe, GetLikesOnUser } from "
 
 export const likesRoutes = new Hono();
 
-// likesRoutes.get("/on/:postId", async (c) => {
-//   try {
-//     const postId = c.req.param("postId");
-//     const { page, limit } = getPagination(c);
-//     const result = await GetLikes({ postId, page, limit });
-//     return c.json(result, 200);
-//   } catch (error) {
-//     if (error === GetLikesError.POST_NOT_FOUND) {
-//       return c.json({ error: "Post not found" }, 404);
-//     }
-//     if (error === GetLikesError.LIKES_NOT_FOUND) {
-//       return c.json({ error: "No likes found on this post" }, 404);
-//     }
-//     if (error === GetLikesError.PAGE_NOT_FOUND) {
-//       return c.json({ error: "No likes found on the requested page" }, 404);
-//     }
-//     return c.json({ error: "Unknown error" }, 500);
-//   }
-// });
-
-
-
-likesRoutes.get("/on/:postId", sessionMiddleware, async (c) => {
+likesRoutes.get("/on/:postId", async (c) => {
   try {
     const postId = c.req.param("postId");
     const { page, limit } = getPagination(c);
-    const userId = c.get("user")?.id; // Get logged in user ID
-
     const result = await GetLikes({ postId, page, limit });
-
-    const likedByCurrentUser = result.likes.some((like: any) => like.userId === userId);
-
-    return c.json(
-      {
-        likes: result.likes,
-        likedByCurrentUser, // <-- return true/false
-      },
-      200
-    );
+    return c.json(result, 200);
   } catch (error) {
     if (error === GetLikesError.POST_NOT_FOUND) {
       return c.json({ error: "Post not found" }, 404);
@@ -66,6 +33,39 @@ likesRoutes.get("/on/:postId", sessionMiddleware, async (c) => {
     return c.json({ error: "Unknown error" }, 500);
   }
 });
+
+
+
+// likesRoutes.get("/on/:postId", sessionMiddleware, async (c) => {
+//   try {
+//     const postId = c.req.param("postId");
+//     const { page, limit } = getPagination(c);
+//     const userId = c.get("user")?.id; // Get logged in user ID
+
+//     const result = await GetLikes({ postId, page, limit });
+
+//     const likedByCurrentUser = result.likes.some((like: any) => like.userId === userId);
+
+//     return c.json(
+//       {
+//         likes: result.likes,
+//         likedByCurrentUser, // <-- return true/false
+//       },
+//       200
+//     );
+//   } catch (error) {
+//     if (error === GetLikesError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found" }, 404);
+//     }
+//     if (error === GetLikesError.LIKES_NOT_FOUND) {
+//       return c.json({ error: "No likes found on this post" }, 404);
+//     }
+//     if (error === GetLikesError.PAGE_NOT_FOUND) {
+//       return c.json({ error: "No likes found on the requested page" }, 404);
+//     }
+//     return c.json({ error: "Unknown error" }, 500);
+//   }
+// });
 
 
 
