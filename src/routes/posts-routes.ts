@@ -15,22 +15,38 @@ import { CreatePost, DeletePost, GetPostById, GetPosts, GetUserPosts, GetUserPos
 
 export const postsRoutes = new Hono();
 
+// postsRoutes.get("/", async (context) => {
+//   try {
+//     const { page, limit } = getPagination(context);
+
+//     const result = await GetPosts({ page, limit});
+//     return context.json(result, { status: 200 });
+//   } catch (error) {
+//     if (error === GetPostsError.POSTS_NOT_FOUND) {
+//       return context.json(
+//         { error: "No posts found in the system!" },
+//         { status: 404 }
+//       );
+//     }
+//     if (error === GetPostsError.PAGE_BEYOND_LIMIT) {
+//       return context.json(
+//         { error: "No posts found on the requested page!" },
+//         { status: 404 }
+//       );
+//     }
+//     return context.json({ error: "Unknown error!" }, { status: 500 });
+//   }
+// });
+
+
 postsRoutes.get("/", async (context) => {
   try {
-    const { page, limit } = getPagination(context);
-
-    const result = await GetPosts({ page, limit});
+    const result = await GetPosts({});
     return context.json(result, { status: 200 });
   } catch (error) {
     if (error === GetPostsError.POSTS_NOT_FOUND) {
       return context.json(
         { error: "No posts found in the system!" },
-        { status: 404 }
-      );
-    }
-    if (error === GetPostsError.PAGE_BEYOND_LIMIT) {
-      return context.json(
-        { error: "No posts found on the requested page!" },
         { status: 404 }
       );
     }

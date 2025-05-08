@@ -15,31 +15,105 @@ import {
   GetUserPostsBySlugError,
 } from "./posts-types.js";
 
+// export const GetPosts = async (parameter: {
+//   page: number;
+//   limit: number;
+//   userId?: string; // 👈 added userId
+// }): Promise<GetPostsResult | Context> => {
+//   try {
+//     const { page, limit, userId } = parameter;
+//     const skip = (page - 1) * limit;
+
+//     // checking if the posts exist
+//     const totalPosts = await prisma.post.count();
+//     if (totalPosts === 0) {
+//       throw GetPostsError.POSTS_NOT_FOUND;
+//     }
+
+//     // checking if given page number doesn't exist or is beyond limits
+//     const totalPages = Math.ceil(totalPosts / limit);
+//     if (page > totalPages) {
+//       throw GetPostsError.PAGE_BEYOND_LIMIT;
+//     }
+
+//     const posts = await prisma.post.findMany({
+//       orderBy: { createdAt: "desc" },
+//       skip,
+//       take: limit,
+//       include: {
+//         author: {
+//           select: {
+//             id: true,
+//             username: true,
+//             name: true,
+//           },
+//         },
+//         likes: {
+//           select: {
+//             userId: true,
+//           },
+//         },
+//         comments: {
+//           include: {
+//             user: {
+//               select: {
+//                 username: true,
+//                 name: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     });
+
+//     const formattedPosts = posts.map((post, index) => ({
+//       number: index + 1,
+//       id: post.id,
+//       title: post.title,
+//       content: post.content,
+//       createdAt: post.createdAt,
+//       updatedAt: post.updatedAt,
+//       userId: post.author.id,
+//       user: {
+//         username: post.author.username,
+//         name: post.author.name,
+//       },
+//       likeCount: post.likes.length,
+//       likedByUser: userId
+//         ? post.likes.some((like) => like.userId === userId)
+//         : false,
+//       comments: post.comments.map((comment) => ({
+//         id: comment.id,
+//         content: comment.content,
+//         createdAt: comment.createdAt,
+//         user: {
+//           username: comment.user.username,
+//           name: comment.user.name,
+//         },
+//       })),
+//     }));
+
+//     return { posts: formattedPosts };
+//   } catch (e) {
+//     console.error(e);
+//     if (e === GetPostsError.POSTS_NOT_FOUND) {
+//       throw GetPostsError.POSTS_NOT_FOUND;
+//     }
+//     if (e === GetPostsError.PAGE_BEYOND_LIMIT) {
+//       throw GetPostsError.PAGE_BEYOND_LIMIT;
+//     }
+//     throw GetPostsError.UNKNOWN;
+//   }
+// };
+
 export const GetPosts = async (parameter: {
-  page: number;
-  limit: number;
-  userId?: string; // 👈 added userId
+  userId?: string;
 }): Promise<GetPostsResult | Context> => {
   try {
-    const { page, limit, userId } = parameter;
-    const skip = (page - 1) * limit;
-
-    // checking if the posts exist
-    const totalPosts = await prisma.post.count();
-    if (totalPosts === 0) {
-      throw GetPostsError.POSTS_NOT_FOUND;
-    }
-
-    // checking if given page number doesn't exist or is beyond limits
-    const totalPages = Math.ceil(totalPosts / limit);
-    if (page > totalPages) {
-      throw GetPostsError.PAGE_BEYOND_LIMIT;
-    }
+    const { userId } = parameter;
 
     const posts = await prisma.post.findMany({
       orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
       include: {
         author: {
           select: {
@@ -65,6 +139,10 @@ export const GetPosts = async (parameter: {
         },
       },
     });
+
+    if (posts.length === 0) {
+      throw GetPostsError.POSTS_NOT_FOUND;
+    }
 
     const formattedPosts = posts.map((post, index) => ({
       number: index + 1,
@@ -99,12 +177,10 @@ export const GetPosts = async (parameter: {
     if (e === GetPostsError.POSTS_NOT_FOUND) {
       throw GetPostsError.POSTS_NOT_FOUND;
     }
-    if (e === GetPostsError.PAGE_BEYOND_LIMIT) {
-      throw GetPostsError.PAGE_BEYOND_LIMIT;
-    }
     throw GetPostsError.UNKNOWN;
   }
 };
+
 
 export const GetUserPosts = async (parameters: {
   userId: string;
