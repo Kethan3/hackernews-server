@@ -21,6 +21,9 @@ import {
 
 export const postsRoutes = new Hono();
 
+
+//ignore first route as it is not req
+
 // postsRoutes.get("/", async (context) => {
 //   try {
 //     const { page, limit } = getPagination(context);
@@ -44,21 +47,152 @@ export const postsRoutes = new Hono();
 //   }
 // });
 
+
+
+
+
+
+
+// postsRoutes.get("/", async (context) => {
+//   try {
+//     const result = await GetPosts({});
+//     return context.json(result, { status: 200 });
+//   } catch (error) {
+//     if (error === GetPostsError.POSTS_NOT_FOUND) {
+//       return context.json(
+//         { error: "No posts found in the system!" },
+//         { status: 404 }
+//       );
+//     }
+//     return context.json({ error: "Unknown error!" }, { status: 500 });
+//   }
+// });
+
+// postsRoutes.get("/me", sessionMiddleware, async (c) => {
+//   try {
+//     const userId = c.get("user")?.id;
+//     const { page, limit } = getPagination(c);
+//     const result = await GetUserPosts({ userId, page, limit });
+//     return c.json(result, { status: 200 });
+//   } catch (error) {
+//     if (error === GetPostsError.POSTS_NOT_FOUND) {
+//       return c.json({ error: "You haven't created any posts yet!" }, 404);
+//     }
+//     if (error === GetPostsError.PAGE_BEYOND_LIMIT) {
+//       return c.json({ error: "No posts found on the requested page!" }, 404);
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.post("/", sessionMiddleware, async (c) => {
+//   try {
+//     const userId = c.get("user").id;
+//     const { title, content } = await c.req.json();
+//     const result = await CreatePost({ userId, title, content });
+//     return c.json(result, 201);
+//   } catch (error) {
+//     if (error === CreatePostError.TITLE_REQUIRED) {
+//       return c.json({ error: "Title is required!" }, 400);
+//     }
+//     if (error === CreatePostError.USER_NOT_FOUND) {
+//       return c.json({ error: "User not found!" }, 404);
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.get("/:postId", async (c) => {
+//   try {
+//     const postId = c.req.param("postId");
+//     const result = await GetPostById({ postId });
+//     return c.json(result, 200);
+//   } catch (error) {
+//     if (error === GetPostByIdError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found!" }, 404);
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
+//   try {
+//     const userId = c.get("user").id;
+//     const postId = c.req.param("postId");
+//     await DeletePost({ postId, userId });
+//     return c.json({ message: "Post deleted successfully" }, 200);
+//   } catch (error) {
+//     if (error === DeletePostError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found!" }, 404);
+//     }
+//     if (error === DeletePostError.USER_NOT_FOUND) {
+//       return c.json({ error: "User not found!" });
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.get("/:postId", sessionMiddleware, async (c) => {
+//   try {
+//     const postId = c.req.param("postId");
+//     const userId = c.get("user")?.id;
+//     const result = await GetPostById({ postId, userId });
+//     return c.json(result, 200);
+//   } catch (error) {
+//     if (error === GetPostByIdError.POST_NOT_FOUND) {
+//       return c.json({ error: "Post not found!" }, 404);
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.get("/by/:slug", async (c) => {
+//   try {
+//     const { slug } = c.req.param();
+//     const { page, limit } = getPagination(c);
+
+//     const result = await GetUserPostsBySlug({ slug, page, limit });
+
+//     if (result.posts.length === 0) {
+//       return c.json({ error: "This user hasn't created any posts yet!" }, 404);
+//     }
+
+//     return c.json(result, 200);
+//   } catch (error) {
+//     if (error === GetPostsError.POSTS_NOT_FOUND) {
+//       return c.json({ error: "This user hasn't created any posts yet!" }, 404);
+//     }
+//     if (error === GetPostsError.PAGE_BEYOND_LIMIT) {
+//       return c.json({ error: "No posts found on the requested page!" }, 404);
+//     }
+//     return c.json({ error: "Unknown error!" }, 500);
+//   }
+// });
+
+// postsRoutes.get("/search", async (c) => {
+//   const query = c.req.query("query") || "";
+
+//   try {
+//     const posts = await searchPostsByTitle(query);
+//     return c.json({ posts });
+//   } catch (error) {
+//     console.error("Search error:", error);
+//     return c.json({ posts: [] }, 500);
+//   }
+// });
+
+
+
 postsRoutes.get("/", async (context) => {
   try {
     const result = await GetPosts({});
     return context.json(result, { status: 200 });
   } catch (error) {
-    if (error === GetPostsError.POSTS_NOT_FOUND) {
-      return context.json(
-        { error: "No posts found in the system!" },
-        { status: 404 }
-      );
-    }
     return context.json({ error: "Unknown error!" }, { status: 500 });
   }
 });
 
+// ✅ 2. Get current user's posts
 postsRoutes.get("/me", sessionMiddleware, async (c) => {
   try {
     const userId = c.get("user")?.id;
@@ -76,6 +210,7 @@ postsRoutes.get("/me", sessionMiddleware, async (c) => {
   }
 });
 
+// ✅ 3. Create a post
 postsRoutes.post("/", sessionMiddleware, async (c) => {
   try {
     const userId = c.get("user").id;
@@ -93,6 +228,7 @@ postsRoutes.post("/", sessionMiddleware, async (c) => {
   }
 });
 
+// ✅ 4. Get post by ID
 postsRoutes.get("/:postId", async (c) => {
   try {
     const postId = c.req.param("postId");
@@ -106,6 +242,7 @@ postsRoutes.get("/:postId", async (c) => {
   }
 });
 
+// ✅ 5. Delete a post
 postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
   try {
     const userId = c.get("user").id;
@@ -117,12 +254,13 @@ postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
       return c.json({ error: "Post not found!" }, 404);
     }
     if (error === DeletePostError.USER_NOT_FOUND) {
-      return c.json({ error: "User not found!" });
+      return c.json({ error: "User not found!" }, 404);
     }
     return c.json({ error: "Unknown error!" }, 500);
   }
 });
 
+// ✅ 6. Get post by ID (with auth, optional)
 postsRoutes.get("/:postId", sessionMiddleware, async (c) => {
   try {
     const postId = c.req.param("postId");
@@ -137,6 +275,7 @@ postsRoutes.get("/:postId", sessionMiddleware, async (c) => {
   }
 });
 
+// ✅ 7. Get posts by user slug
 postsRoutes.get("/by/:slug", async (c) => {
   try {
     const { slug } = c.req.param();
@@ -160,6 +299,7 @@ postsRoutes.get("/by/:slug", async (c) => {
   }
 });
 
+// ✅ 8. Search posts
 postsRoutes.get("/search", async (c) => {
   const query = c.req.query("query") || "";
 
