@@ -387,6 +387,11 @@ export const GetUserById = async (userId: string): Promise<UserDetails> => {
             createdAt: true,
             updatedAt: true,
             userId: true,
+            post: {
+              select: {
+                title: true,
+              },
+            },
           },
         },
         likes: {
@@ -410,10 +415,15 @@ export const GetUserById = async (userId: string): Promise<UserDetails> => {
     }
 
     const filteredComments = user.comments
-      .filter(comment => comment.postId !== null)
+      .filter(comment => comment.postId !== null && comment.post !== null)
       .map(comment => ({
-        ...comment,
+        id: comment.id,
+        content: comment.content,
         postId: comment.postId as string,
+        createdAt: comment.createdAt,
+        updatedAt: comment.updatedAt,
+        userId: comment.userId,
+        postTitle: comment.post!.title,
       }));
 
     const result: UserDetails = {
@@ -439,5 +449,6 @@ export const GetUserById = async (userId: string): Promise<UserDetails> => {
     throw new Error("Unknown error");
   }
 };
+
 
 
