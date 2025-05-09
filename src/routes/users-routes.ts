@@ -132,7 +132,7 @@ usersRoutes.get("/", sessionMiddleware, async (context) => {
 });
 
 
-usersRoutes.get("/:id", sessionMiddleware, async (context) => {
+usersRoutes.get("/:id",  async (context) => {
   const userId = context.req.param("id"); // Get userId from URL params
 
   try {
