@@ -113,6 +113,36 @@ export type GetMeResult = {
 };
 
 
+// export type UserDetails = {
+//   user: {
+//     id: string;
+//     username: string;
+//     name: string;
+//     about: string;
+//     createdAt: Date;
+//     updatedAt: Date;
+//     postsCount: number;
+//     commentsCount: number;
+//     posts: {
+//       id: string;
+//       title: string;
+//       content: string;
+//       createdAt: Date;
+//       updatedAt: Date;
+//       userId: string;
+//     }[];
+//     comments: {
+//       id: string;
+//       content: string;
+//       postId: string;
+//       createdAt: Date;
+//       updatedAt: Date;
+//       userId: string;
+//     }[];
+//   };
+// };
+
+
 export type UserDetails = {
   user: {
     id: string;
@@ -123,6 +153,7 @@ export type UserDetails = {
     updatedAt: Date;
     postsCount: number;
     commentsCount: number;
+    likesCount: number;
     posts: {
       id: string;
       title: string;
@@ -139,8 +170,16 @@ export type UserDetails = {
       updatedAt: Date;
       userId: string;
     }[];
+    likedPosts: {
+      id: string;
+      title: string;
+      content: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[];
   };
 };
+
 
 
 export enum GetMeError {
