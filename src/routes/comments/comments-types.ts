@@ -1,8 +1,23 @@
 import type { Comment } from "../../generated/prisma/index.js";
 
+// export type GetCommentsResult = {
+//   comments: Comment[];
+// };
+
+
 export type GetCommentsResult = {
-  comments: Comment[];
+  comments: {
+    id: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+    postId: string | null;
+    userId: string;
+    userName: string;
+  }[];
 };
+
+
 
 export enum GetCommentsError {
   POST_NOT_FOUND = "POST_NOT_FOUND",
