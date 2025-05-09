@@ -96,6 +96,78 @@ import {
 // };
 
 
+// export const GetMe = async (parameters: {
+//   userId: string;
+// }): Promise<GetMeResult> => {
+//   try {
+//     const { userId } = parameters;
+
+//     const user = await prisma.user.findUnique({
+//       where: { id: userId },
+//       select: {
+//         id: true,
+//         username: true,
+//         name: true,
+//         about: true,
+//         createdAt: true,
+//         updatedAt: true,
+//         posts: {
+//           select: {
+//             id: true,
+//             title: true,
+//             content: true,
+//             createdAt: true,
+//             updatedAt: true,
+//             userId: true,
+//           },
+//         },
+//         comments: {
+//           select: {
+//             id: true,
+//             content: true,
+//             postId: true,
+//             createdAt: true,
+//             updatedAt: true,
+//             userId: true,
+//           },
+//         },
+//         likes: {
+//           select: {
+//             id: true,
+//             postId: true,
+//             createdAt: true,
+//             updatedAt: true,
+//             userId: true,
+//           },
+//         },
+//       },
+//     });
+
+//     if (!user) {
+//       throw GetMeError.USER_NOT_FOUND;
+//     }
+
+//     const result: GetMeResult = {
+//       user: {
+//         id: user.id,
+//         username: user.username,
+//         name: user.name || "",
+//         about: user.about || "",
+//         createdAt: user.createdAt,
+//         updatedAt: user.updatedAt,
+//         posts: user.posts || [],
+//         comments: user.comments || [],
+//         likes: user.likes || [],
+//       },
+//     };
+
+//     return result;
+//   } catch (e) {
+//     console.error(e);
+//     throw GetMeError.UNKNOWN;
+//   }
+// };
+
 export const GetMe = async (parameters: {
   userId: string;
 }): Promise<GetMeResult> => {
@@ -129,6 +201,11 @@ export const GetMe = async (parameters: {
             createdAt: true,
             updatedAt: true,
             userId: true,
+            post: { // Include post title in comments
+              select: {
+                title: true,
+              },
+            },
           },
         },
         likes: {
@@ -138,6 +215,11 @@ export const GetMe = async (parameters: {
             createdAt: true,
             updatedAt: true,
             userId: true,
+            post: { // Include post title in likes
+              select: {
+                title: true,
+              },
+            },
           },
         },
       },
@@ -167,7 +249,6 @@ export const GetMe = async (parameters: {
     throw GetMeError.UNKNOWN;
   }
 };
-
 
 
 export const GetUsers = async (parameter: {
