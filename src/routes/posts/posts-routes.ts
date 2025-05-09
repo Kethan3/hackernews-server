@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { sessionMiddleware } from "./middlewares/session-middleware.js";
+import { sessionMiddleware } from "../middlewares/session-middleware.js";
 
 import {
   GetPostsError,
@@ -7,11 +7,17 @@ import {
   // DeletePostError,
   GetPostByIdError,
   DeletePostError,
-} from "../controllers/posts/posts-types.js";
-import { getPagination } from "../extras/pagination.js";
-import { CreatePost, DeletePost, GetPostById, GetPosts, GetUserPosts, GetUserPostsBySlug } from "../controllers/posts/posts-controller.js";
-
-
+} from "./posts-types.js";
+import { getPagination } from "../../extras/pagination.js";
+import {
+  CreatePost,
+  DeletePost,
+  GetPostById,
+  GetPosts,
+  GetUserPosts,
+  GetUserPostsBySlug,
+  searchPostsByTitle,
+} from "./posts-controller.js";
 
 export const postsRoutes = new Hono();
 
@@ -38,7 +44,6 @@ export const postsRoutes = new Hono();
 //   }
 // });
 
-
 postsRoutes.get("/", async (context) => {
   try {
     const result = await GetPosts({});
@@ -53,7 +58,6 @@ postsRoutes.get("/", async (context) => {
     return context.json({ error: "Unknown error!" }, { status: 500 });
   }
 });
-
 
 postsRoutes.get("/me", sessionMiddleware, async (c) => {
   try {
@@ -102,7 +106,6 @@ postsRoutes.get("/:postId", async (c) => {
   }
 });
 
-
 postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
   try {
     const userId = c.get("user").id;
@@ -120,7 +123,7 @@ postsRoutes.delete("/:postId", sessionMiddleware, async (c) => {
   }
 });
 
-postsRoutes.get("/:postId",sessionMiddleware, async (c) => {
+postsRoutes.get("/:postId", sessionMiddleware, async (c) => {
   try {
     const postId = c.req.param("postId");
     const userId = c.get("user")?.id;
@@ -133,8 +136,6 @@ postsRoutes.get("/:postId",sessionMiddleware, async (c) => {
     return c.json({ error: "Unknown error!" }, 500);
   }
 });
-
-
 
 postsRoutes.get("/by/:slug", async (c) => {
   try {
@@ -156,5 +157,17 @@ postsRoutes.get("/by/:slug", async (c) => {
       return c.json({ error: "No posts found on the requested page!" }, 404);
     }
     return c.json({ error: "Unknown error!" }, 500);
+  }
+});
+
+postsRoutes.get("/search", async (c) => {
+  const query = c.req.query("query") || "";
+
+  try {
+    const posts = await searchPostsByTitle(query);
+    return c.json({ posts });
+  } catch (error) {
+    console.error("Search error:", error);
+    return c.json({ posts: [] }, 500);
   }
 });

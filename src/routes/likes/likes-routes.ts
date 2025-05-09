@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { sessionMiddleware } from "./middlewares/session-middleware.js";
+import { sessionMiddleware } from "../middlewares/session-middleware.js";
 
 import {
   DeleteLikeError,
@@ -7,10 +7,15 @@ import {
   GetLikesOnMeError,
   LikePostError,
   GetLikesOnUserError,
-} from "../controllers/likes/likes-types.js";
-import { getPagination } from "../extras/pagination.js";
-import { CreateLike, DeleteLike, GetLikes, GetLikesOnMe, GetLikesOnUser } from "../controllers/likes/likes-controller.js";
-
+} from "./likes-types.js";
+import { getPagination } from "../../extras/pagination.js";
+import {
+  CreateLike,
+  DeleteLike,
+  GetLikes,
+  GetLikesOnMe,
+  GetLikesOnUser,
+} from "./likes-controller.js";
 
 export const likesRoutes = new Hono();
 
@@ -33,8 +38,6 @@ likesRoutes.get("/on/:postId", async (c) => {
     return c.json({ error: "Unknown error" }, 500);
   }
 });
-
-
 
 // likesRoutes.get("/on/:postId", sessionMiddleware, async (c) => {
 //   try {
@@ -66,13 +69,6 @@ likesRoutes.get("/on/:postId", async (c) => {
 //     return c.json({ error: "Unknown error" }, 500);
 //   }
 // });
-
-
-
-
-
-
-
 
 likesRoutes.post("/on/:postId", sessionMiddleware, async (c) => {
   try {

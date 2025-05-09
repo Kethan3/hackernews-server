@@ -1,11 +1,11 @@
 import { Hono } from "hono";
 
-import { GetUsersError, GetMeError } from "../controllers/users/users-types.js";
+import { GetUsersError, GetMeError } from "./users-types.js";
 
-import { prismaClient } from "../integrations/prisma/index.js";
-import { sessionMiddleware } from "./middlewares/session-middleware.js";
-import { getPagination } from "../extras/pagination.js";
-import { GetMe, GetUserById, GetUsers } from "../controllers/users/users-controller.js";
+import { prismaClient } from "../../integrations/prisma/index.js";
+import { sessionMiddleware } from "../middlewares/session-middleware.js";
+import { getPagination } from "../../extras/pagination.js";
+import { GetMe, GetUserById, GetUsers } from "./users-controller.js";
 export const usersRoutes = new Hono();
 
 // usersRoutes.all("/me", sessionMiddleware, async (context) => {
@@ -58,7 +58,6 @@ export const usersRoutes = new Hono();
 //   }
 // });
 
-
 usersRoutes.all("/me", sessionMiddleware, async (context) => {
   const user = context.get("user");
   const userId = user?.id;
@@ -105,9 +104,6 @@ usersRoutes.all("/me", sessionMiddleware, async (context) => {
   }
 });
 
-
-
-
 usersRoutes.get("/", sessionMiddleware, async (context) => {
   try {
     const { page, limit } = getPagination(context);
@@ -123,7 +119,9 @@ usersRoutes.get("/", sessionMiddleware, async (context) => {
     }
     if (error === GetUsersError.PAGE_BEYOND_LIMIT) {
       return context.json(
-        { error: "No users found on the page requested" }, 404);
+        { error: "No users found on the page requested" },
+        404
+      );
     }
     if (error === GetUsersError.UNKNOWN) {
       return context.json({ error: "Unknown error" }, 500);
@@ -131,8 +129,7 @@ usersRoutes.get("/", sessionMiddleware, async (context) => {
   }
 });
 
-
-usersRoutes.get("/:id",  async (context) => {
+usersRoutes.get("/:id", async (context) => {
   const userId = context.req.param("id"); // Get userId from URL params
 
   try {
@@ -144,6 +141,6 @@ usersRoutes.get("/:id",  async (context) => {
 
     return context.json(result, 200);
   } catch (error) {
-    return context.json(  "Unknown error" , 500);
+    return context.json("Unknown error", 500);
   }
 });

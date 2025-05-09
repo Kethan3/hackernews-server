@@ -644,3 +644,22 @@ export const GetUserPostsBySlug = async (parameters: {
 };
 
 
+export const searchPostsByTitle = async (query: string) => {
+  if (!query.trim()) return [];
+
+  const posts = await prisma.post.findMany({
+    where: {
+      title: {
+        contains: query,
+        mode: "insensitive",
+      },
+    },
+    select: {
+      id: true,
+      title: true,
+    },
+    take: 10,
+  });
+
+  return posts;
+};
