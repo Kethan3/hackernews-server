@@ -182,6 +182,7 @@ export type UserDetails = {
 
 
 
+
 export enum GetMeError {
   USER_NOT_FOUND = "USER_NOT_FOUND",
   PAGE_BEYOND_LIMIT = "PAGE_BEYOND_LIMIT",
