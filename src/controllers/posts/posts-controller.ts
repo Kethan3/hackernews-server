@@ -339,6 +339,77 @@ export const DeletePost = async (parameters: {
 //   }
 // };
 
+
+
+// export const GetPostById = async (parameters: {
+//   postId: string;
+//   userId?: string;
+// }): Promise<GetPostByIdResult> => {
+//   try {
+//     const { postId, userId } = parameters;
+
+//     const post = await prisma.post.findUnique({
+//       where: { id: postId },
+//       include: {
+//         author: {
+//           select: {
+//             id: true, // ✅ Fix: Include id based on schema
+//             username: true,
+//             name: true,
+//           },
+//         },
+//         likes: {
+//           select: { userId: true },
+//         },
+//         comments: {
+//           include: {
+//             user: {
+//               select: {
+//                 username: true,
+//                 name: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     });
+
+//     if (!post) throw GetPostByIdError.POST_NOT_FOUND;
+
+//     const formattedPost = {
+//       id: post.id,
+//       title: post.title,
+//       content: post.content,
+//       createdAt: post.createdAt,
+//       updatedAt: post.updatedAt,
+//       userId: post.author.id, // ✅ This works now
+//       user: {
+//         username: post.author.username,
+//         name: post.author.name,
+//       },
+//       likeCount: post.likes.length,
+//       likedByUser: userId ? post.likes.some((like) => like.userId === userId) : false,
+//       comments: post.comments.map((comment) => ({
+//         id: comment.id,
+//         content: comment.content,
+//         createdAt: comment.createdAt,
+//         user: {
+//           username: comment.user.username,
+//           name: comment.user.name,
+//         },
+//       })),
+//     };
+
+//     return { post: formattedPost };
+//   } catch (e) {
+//     console.error(e);
+//     if (e === GetPostByIdError.POST_NOT_FOUND) {
+//       throw GetPostByIdError.POST_NOT_FOUND;
+//     }
+//     throw GetPostByIdError.UNKNOWN;
+//   }
+// };
+
 export const GetPostById = async (parameters: {
   postId: string;
   userId?: string;
@@ -351,7 +422,7 @@ export const GetPostById = async (parameters: {
       include: {
         author: {
           select: {
-            id: true, // ✅ Fix: Include id based on schema
+            id: true, // ✅ Include ID
             username: true,
             name: true,
           },
@@ -380,8 +451,9 @@ export const GetPostById = async (parameters: {
       content: post.content,
       createdAt: post.createdAt,
       updatedAt: post.updatedAt,
-      userId: post.author.id, // ✅ This works now
+      userId: post.author.id,
       user: {
+        id: post.author.id, // ✅ Add this
         username: post.author.username,
         name: post.author.name,
       },
@@ -407,6 +479,7 @@ export const GetPostById = async (parameters: {
     throw GetPostByIdError.UNKNOWN;
   }
 };
+
 
 
 export const GetCommentsByPostId = async (parameters: {
