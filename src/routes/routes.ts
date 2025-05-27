@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { swaggerUI } from "@hono/swagger-ui";
 
-import { authenticationRoutes } from "./authentication/authentication-routes.js";
+
 import { usersRoutes } from "./users/users-routes.js";
 import { postsRoutes } from "./posts/posts-routes.js";
 import { likesRoutes } from "./likes/likes-routes.js";
@@ -24,10 +24,10 @@ allRoutes.use(
   })
 );
 
-allRoutes.get("/ui", swaggerUI({ url: "/docs" }));
+
 
 allRoutes.route("/api/auth", authRoute);
-allRoutes.route("/auth", authenticationRoutes);
+
 allRoutes.route("/users", usersRoutes);
 allRoutes.route("/posts", postsRoutes);
 allRoutes.route("/likes", likesRoutes);
